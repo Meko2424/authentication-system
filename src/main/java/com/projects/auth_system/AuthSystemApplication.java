@@ -1,5 +1,6 @@
 package com.projects.auth_system;
 
+
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,16 +10,14 @@ public class AuthSystemApplication {
 
 	public static void main(String[] args) {
 
-		// load .evn file
+		// Load .env file
 		Dotenv dotenv = Dotenv.load();
 
-		// Set system properties so Spring can read
+		// Set system properties so Spring can read them
 		System.setProperty("DB_URL", dotenv.get("DB_URL"));
 		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
 		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
 
-
 		SpringApplication.run(AuthSystemApplication.class, args);
 	}
-
 }
