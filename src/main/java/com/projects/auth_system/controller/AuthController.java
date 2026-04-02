@@ -1,10 +1,10 @@
 package com.projects.auth_system.controller;
 
 
+import com.projects.auth_system.dto.LoginRequest;
 import com.projects.auth_system.dto.RegisterRequest;
 import com.projects.auth_system.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,15 +16,12 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request){
+    public String register(@RequestBody @jakarta.validation.Valid RegisterRequest request){
         return authService.register(request);
     }
 
-    @Value("${spring.security.user.name}")
-    private String username;
-
-    @GetMapping("/test-auth")
-    public String test() {
-        return "Current user is: " + username;
-    }
+   @PostMapping("/login")
+    public String login(@RequestBody LoginRequest request){
+        return authService.login(request);
+   }
 }
