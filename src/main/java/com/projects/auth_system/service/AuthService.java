@@ -1,7 +1,9 @@
 package com.projects.auth_system.service;
 
 
+import com.projects.auth_system.dto.AuthResponse;
 import com.projects.auth_system.dto.LoginRequest;
+import com.projects.auth_system.dto.MessageResponse;
 import com.projects.auth_system.dto.RegisterRequest;
 import com.projects.auth_system.entity.User;
 import com.projects.auth_system.repository.UserRepository;
@@ -22,10 +24,10 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public String register(RegisterRequest request){
+    public MessageResponse register(RegisterRequest request){
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            return "Email already exists";
+            return new MessageResponse("Email already exists") ;
         }
 
 
@@ -38,10 +40,10 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(user);
-        return "User registered successfully";
+        return new MessageResponse("User registered successfully") ;
     }
 
-    public String login(LoginRequest request){
+    public AuthResponse login(LoginRequest request){
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -50,6 +52,7 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
+        return new AuthResponse(token);
     }
 }
